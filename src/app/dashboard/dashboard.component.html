@@ -1,5 +1,6 @@
 <div class="grid-container">
   <h1 class="mat-h1">{{title}}</h1>
+  <button (click)="addGraph()">Add Graph</button>
 
   <mat-grid-list cols="1">
     <mat-card> 
@@ -7,9 +8,10 @@
     </mat-card>
   </mat-grid-list>
   
-  <mat-grid-list cols="2">
-    <mat-grid-tile><app-dygraph-viewer [width]="otherGraphsWidth"></app-dygraph-viewer></mat-grid-tile>
-    <mat-grid-tile><app-dygraph-viewer [width]="otherGraphsWidth"></app-dygraph-viewer></mat-grid-tile>
+  <mat-grid-list cols={{graphsInRow2.length}} >
+    <mat-grid-tile *ngFor="let graph of graphsInRow2">
+      <app-dygraph-viewer [width]="otherGraphsWidth"></app-dygraph-viewer>
+    </mat-grid-tile>
   </mat-grid-list>
 
 </div>

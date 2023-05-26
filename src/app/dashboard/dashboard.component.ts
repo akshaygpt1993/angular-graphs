@@ -10,16 +10,20 @@ export class DashboardComponent implements OnDestroy {
   title = "Data Viewer";
   currentWindowWidth = window.innerWidth;
 
-  graphsInRow2 = 2;
+  graphsInRow2 = [{title: "Graph 1"}, {title: "Graph 2"}];
 
   mainGraphWidth = this.currentWindowWidth;
-  otherGraphsWidth = this.currentWindowWidth / this.graphsInRow2; 
+  otherGraphsWidth = this.currentWindowWidth / this.graphsInRow2.length; 
 
   windowResize$ = fromEvent(window, 'resize').subscribe((event: any) => {
     this.currentWindowWidth = event.target.innerWidth;
     this.mainGraphWidth = this.currentWindowWidth;
-    this.otherGraphsWidth = this.currentWindowWidth / this.graphsInRow2; 
-  });  
+    this.otherGraphsWidth = this.currentWindowWidth / this.graphsInRow2.length; 
+  }); 
+
+  addGraph() {
+    this.graphsInRow2.push({title: `Graph ${this.graphsInRow2.length - 1}`});
+  }
 
   ngOnDestroy(): void {
     this.windowResize$.unsubscribe()
