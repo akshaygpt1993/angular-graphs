@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, Input, OnChanges } from '@angular/core';
 import Dygraph from 'dygraphs';
 
 @Component({
@@ -6,7 +6,9 @@ import Dygraph from 'dygraphs';
   templateUrl: './dygraph-viewer.component.html',
   styleUrls: ['./dygraph-viewer.component.css']
 })
-export class DygraphViewerComponent implements AfterViewInit {
+export class DygraphViewerComponent implements OnChanges {
+  @Input() width ?= 500; 
+
   @ViewChild('dygraphsdiv') public chart?: ElementRef;
   
   dygraph: any;
@@ -21,15 +23,17 @@ export class DygraphViewerComponent implements AfterViewInit {
     ylabel: 'Y label text',
     title: 'Working title :)',
     animatedZooms: true,
-    pointSize: 4
+    pointSize: 4,
+    width: this.width
   };
 
 
-  ngAfterViewInit(): void {
+  ngOnChanges(): void {
+    console.log(this.options, "options", this.width)
     setTimeout(() => {
       this.dygraph = new Dygraph(this.chart?.nativeElement,
         this.data,
-        this.options
+        {...this.options, width: this.width}
       );
     }, 500);
   }

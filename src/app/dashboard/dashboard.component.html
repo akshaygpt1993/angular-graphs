@@ -1,0 +1,13 @@
+<div class="grid-container">
+  <h1 class="mat-h1">{{title}}</h1>
+
+  <mat-grid-list cols="1">
+    <mat-card> <app-dygraph-viewer [width]=1200></app-dygraph-viewer> </mat-card>
+  </mat-grid-list>
+  
+  <mat-grid-list cols="2">
+    <mat-grid-tile><app-dygraph-viewer [width]=200></app-dygraph-viewer></mat-grid-tile>
+    <mat-grid-tile><app-dygraph-viewer [width]=400></app-dygraph-viewer></mat-grid-tile>
+  </mat-grid-list>
+
+</div>
