@@ -19,21 +19,27 @@ export class DygraphViewerComponent implements OnChanges {
   ];
   options = {
     labels: ['Date','Temperature'],
-    xlabel: 'X label text',
-    ylabel: 'Y label text',
-    title: 'Working title :)',
+    // xlabel: 'X label text',
+    // ylabel: 'Y label text',
+    // title: 'Working title :)',
     animatedZooms: true,
     pointSize: 4,
-    width: this.width
+    width: this.width,
+    height: 300,
   };
 
 
   ngOnChanges(): void {
-    console.log(this.options, "options", this.width)
+    this.options = {
+      ...this.options,
+      width: this.width,
+    }
+    console.log(this.options, "options", this.width);
+
     setTimeout(() => {
       this.dygraph = new Dygraph(this.chart?.nativeElement,
         this.data,
-        {...this.options, width: this.width}
+        this.options
       );
     }, 500);
   }
