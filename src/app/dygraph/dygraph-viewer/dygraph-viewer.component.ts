@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild, Input, OnChanges, ChangeDetectionStra
 import Dygraph from 'dygraphs';
 import { DygraphViewerService } from '../dygraph-viewer.service';
 import { Observable } from 'rxjs';
+import {GraphData} from '../dygraph.typings'
 
 @Component({
   selector: 'app-dygraph-viewer',
@@ -17,9 +18,9 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
   currentWidth = this.graphData?.options.width;
 
   // Use to pass graph data directly.
-  @Input() graphData?: any;
+  @Input() graphData?: GraphData;
   // Use to pass graph data observable.
-  @Input() graphData$?: Observable<any>;
+  @Input() graphData$?: Observable<GraphData>;
   ngOnInit(): void {
     this.graphData$?.subscribe(graphData => {
       this.graphData = graphData,
@@ -27,7 +28,11 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
     })
   }
   // Use to pass graphId using which graph data service will be used to fetch graph data.
-  @Input() graphId: any;
+  @Input() graphId?: number;
+
+  // Graph type
+  @Input() graphType: string = "Default";
+  currentGraphType = this.graphType;
 
   checkAndResizeWidth() {
     if (this.currentWidth !== this.graphData?.options.width) {
@@ -38,24 +43,39 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
 
   fetchGraphDatIfRequired() {
     if (!this.graphData && this.graphId) {
-      this.graphData = this.dyGraphService.getGraphData(this.graphId)
+      this.graphData = this.dyGraphService.getNonObservableGraphData(this.graphId)
     }
   }
 
+  generateGraph() {
+    setTimeout(() => {
+      console.log(this.graphData, "this.graphData")
+      if (this.graphData) {
+        this.dygraph = new Dygraph(this.chart?.nativeElement,
+          this.graphData.data,
+          this.graphData.options
+        );
+      }
+    }, 500);
+  }
+
   ngOnChanges(): void {
+    if (this.currentGraphType !== this.graphType) {
+      this.currentGraphType = this.graphType;
+
+      this.generateGraph();
+    }
+
     this.fetchGraphDatIfRequired();
 
     if (this.dygraph) {
       this.checkAndResizeWidth();
     } else {
-      setTimeout(() => {
-        if (this.graphData) {
-          this.dygraph = new Dygraph(this.chart?.nativeElement,
-            this.graphData.data,
-            this.graphData.options
-          );
-        }
-      }, 500);
+      this.generateGraph();
     }
+  }
+
+  addMoreDataToGraph() {
+  //  this.graphData.data 
   }
 }

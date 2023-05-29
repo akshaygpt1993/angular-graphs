@@ -1,6 +1,7 @@
 import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { fromEvent, BehaviorSubject } from 'rxjs';
 import { DygraphViewerService } from '../dygraph/dygraph-viewer.service';
+import { GraphData } from '../dygraph/dygraph.typings';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +14,7 @@ export class DashboardComponent implements OnDestroy {
 
   title = "Data Viewer";
 
-  mainGraphData$ = new BehaviorSubject(this.dyGraphService.getNonObservableGraphData(1, window.innerWidth))
+  mainGraphData$ = new BehaviorSubject<GraphData>(this.dyGraphService.getNonObservableGraphData(1, window.innerWidth))
   
   graphsInRow2$ = [
     this.dyGraphService.getGraphData(2),

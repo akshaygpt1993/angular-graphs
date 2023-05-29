@@ -1,3 +1,5 @@
+import { GraphData } from "./dygraph.typings";
+
 const graphsData = [
     {
         id: 1,
@@ -12,7 +14,7 @@ const graphsData = [
           animatedZooms: true,
           pointSize: 4,
         }
-    },
+    } as GraphData,
     {
         id: 2,
         title: `Graph 2`,
@@ -26,7 +28,7 @@ const graphsData = [
           animatedZooms: true,
           pointSize: 4,
         }
-    },
+    } as GraphData,
     {
         id: 3,
         title: `Graph 3`,
@@ -40,7 +42,7 @@ const graphsData = [
           animatedZooms: true,
           pointSize: 4,
         }
-    },
+    } as GraphData,
     {
         id: 4,
         title: `Graph 4`,
@@ -54,7 +56,7 @@ const graphsData = [
           animatedZooms: true,
           pointSize: 4,
         }
-    },
+    } as GraphData,
     {
         id: 5,
         title: `Graph 5`,
@@ -68,7 +70,7 @@ const graphsData = [
           animatedZooms: true,
           pointSize: 4,
         }
-    }
+    } as GraphData
 ]
 
 export default graphsData;
