@@ -16,7 +16,9 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
   dygraph: any;
   currentWidth = this.graphData?.options.width;
 
+  // Use to pass graph data directly.
   @Input() graphData?: any;
+  // Use to pass graph data observable.
   @Input() graphData$?: Observable<any>;
   ngOnInit(): void {
     this.graphData$?.subscribe(graphData => {
@@ -24,6 +26,7 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
       this.checkAndResizeWidth()
     })
   }
+  // Use to pass graphId using which graph data service will be used to fetch graph data.
   @Input() graphId: any;
 
   checkAndResizeWidth() {
@@ -33,21 +36,26 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
     }
   }
 
-  ngOnChanges(): void {
+  fetchGraphDatIfRequired() {
     if (!this.graphData && this.graphId) {
       this.graphData = this.dyGraphService.getGraphData(this.graphId)
     }
+  }
 
-    setTimeout(() => {
-      if (this.graphData) {
-        this.dygraph = new Dygraph(this.chart?.nativeElement,
-          this.graphData.data,
-          this.graphData.options
-        );
+  ngOnChanges(): void {
+    this.fetchGraphDatIfRequired();
 
-        this.checkAndResizeWidth()
-      }
-      
-    }, 500);
+    if (this.dygraph) {
+      this.checkAndResizeWidth();
+    } else {
+      setTimeout(() => {
+        if (this.graphData) {
+          this.dygraph = new Dygraph(this.chart?.nativeElement,
+            this.graphData.data,
+            this.graphData.options
+          );
+        }
+      }, 500);
+    }
   }
 }
