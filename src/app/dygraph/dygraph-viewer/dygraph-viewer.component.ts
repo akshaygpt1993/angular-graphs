@@ -21,7 +21,6 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
   ngOnInit(): void {
     this.graphData$?.subscribe(graphData => {
       this.graphData = graphData,
-      console.log(this.currentWidth, this.graphData, "this.graphData.subscribed", this.graphData?.options.width);
       this.checkAndResizeWidth()
     })
   }
@@ -35,8 +34,6 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(): void {
-    console.log(this.currentWidth, this.graphData, "this.graphData onchange", this.graphData?.options.width);
-
     if (!this.graphData && this.graphId) {
       this.graphData = this.dyGraphService.getGraphData(this.graphId)
     }

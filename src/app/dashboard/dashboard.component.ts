@@ -21,7 +21,6 @@ export class DashboardComponent implements OnDestroy {
   ];
 
   windowResize$ = fromEvent(window, 'resize').subscribe((event: any) => {
-    console.log("resizing", event.target.innerWidth)
     this.mainGraphData$.next(this.dyGraphService.getNonObservableGraphData(1, event.target.innerWidth))
   });
 
