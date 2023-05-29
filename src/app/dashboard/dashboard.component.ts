@@ -1,87 +1,34 @@
-import { Component, OnDestroy } from '@angular/core';
-import { fromEvent } from 'rxjs';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { fromEvent, BehaviorSubject } from 'rxjs';
+import { DygraphViewerService } from '../dygraph/dygraph-viewer.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnDestroy {
+  constructor(private dyGraphService: DygraphViewerService) {}
+
   title = "Data Viewer";
-  currentWindowWidth = window.innerWidth;
 
-  mainGraphData={
-    title: "Graph Main",
-    data: [
-      [new Date("2008/05/07"), 75],
-      [new Date("2008/05/08"), 70],
-      [new Date("2008/05/09"), 80]
-    ],
-    options: {
-      labels: ['Date','Temperature'],
-      animatedZooms: true,
-      pointSize: 4,
-      width: this.currentWindowWidth,
-      height: 300,
-    }
-  }
-
-  numberOfGraphs = 2;
-  graphsInRow2 = [
-    {
-      title: "Graph 1",
-      data: [
-        [new Date("2008/05/07"), 75],
-        [new Date("2008/05/08"), 70],
-        [new Date("2008/05/09"), 80]
-      ],
-      options: {
-        labels: ['Date','Temperature'],
-        animatedZooms: true,
-        pointSize: 4,
-        width: this.currentWindowWidth / this.numberOfGraphs,
-        height: 300,
-      }
-    },
-    {
-      title: "Graph 2",
-      data: [
-        [new Date("2008/05/07"), 75],
-        [new Date("2008/05/08"), 70],
-        [new Date("2008/05/09"), 80]
-      ],
-      options: {
-        labels: ['Date','Temperature'],
-        animatedZooms: true,
-        pointSize: 4,
-        width: this.currentWindowWidth / this.numberOfGraphs,
-        height: 300,
-      }
-    }
+  mainGraphData$ = new BehaviorSubject(this.dyGraphService.getNonObservableGraphData(1, window.innerWidth))
+  
+  graphsInRow2$ = [
+    this.dyGraphService.getGraphData(2),
+    this.dyGraphService.getGraphData(3),
   ];
 
   windowResize$ = fromEvent(window, 'resize').subscribe((event: any) => {
-    this.currentWindowWidth = event.target.innerWidth;
+    console.log("resizing", event.target.innerWidth)
+    this.mainGraphData$.next(this.dyGraphService.getNonObservableGraphData(1, event.target.innerWidth))
   });
 
   addGraph() {
-    this.numberOfGraphs = this.numberOfGraphs + 1;
-    this.graphsInRow2.push(
-      {
-        title: `Graph ${this.graphsInRow2.length - 1}`,
-        data: [
-          [new Date("2008/05/07"), 75],
-          [new Date("2008/05/08"), 70],
-          [new Date("2008/05/09"), 80]
-        ],
-        options: {
-          labels: ['Date','Temperature'],
-          animatedZooms: true,
-          pointSize: 4,
-          width: this.currentWindowWidth / this.numberOfGraphs,
-          height: 300,
-        }
-      });
+    this.graphsInRow2$.push(
+      this.dyGraphService.getGraphData(4)
+    );
   }
 
   ngOnDestroy(): void {
