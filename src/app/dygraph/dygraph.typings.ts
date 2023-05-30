@@ -1,5 +1,5 @@
 export interface GraphData {
     id: number,
-    data: any,
+    data: (number | Date)[][],
     options: any,
 }

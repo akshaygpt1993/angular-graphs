@@ -10,7 +10,11 @@
   
   <mat-grid-list cols={{graphsInRow2$.length}} >
     <mat-grid-tile *ngFor="let graph of graphsInRow2$; let i=index">
-      <app-dygraph-viewer [graphData]?="graph | async" [graphType]="i+''"></app-dygraph-viewer>
+      <app-dygraph-viewer
+        *ngIf="graph | async as graphData"
+        [graphData]="graphData"
+        [graphType]="i+''">
+      </app-dygraph-viewer>
     </mat-grid-tile>
   </mat-grid-list>
 

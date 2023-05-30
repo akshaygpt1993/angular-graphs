@@ -76,6 +76,11 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
   }
 
   addMoreDataToGraph() {
-  //  this.graphData.data 
+   this.graphData?.data.push(
+    [new Date("2008/05/10"), 90],
+    [new Date("2008/05/11"), 95],
+    [new Date("2008/05/12"), 100]
+  );
+   this.dygraph.updateOptions({'file': this.graphData?.data})
   }
 }
