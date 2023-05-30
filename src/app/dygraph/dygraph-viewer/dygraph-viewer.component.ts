@@ -23,8 +23,9 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
   @Input() graphData$?: Observable<GraphData>;
   ngOnInit(): void {
     this.graphData$?.subscribe(graphData => {
-      this.graphData = graphData,
-      this.checkAndResizeWidth()
+      this.graphData = graphData;
+      this.generateGraph(this.dyGraphService, this.graphData);
+      this.checkAndResizeWidth();
     })
   }
   // Use to pass graphId using which graph data service will be used to fetch graph data.
@@ -33,6 +34,7 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
   // Graph type
   @Input() graphType: string = "Default";
   currentGraphType = this.graphType;
+  canvasRef?: CanvasRenderingContext2D; 
 
   checkAndResizeWidth() {
     if (this.currentWidth !== this.graphData?.options.width) {
@@ -47,21 +49,34 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
     }
   }
 
-  generateGraph(dygraphService: DygraphViewerService) {
+  drawVerticalLineOnCanvas(clickedPoint: number) {
+    console.log(this.canvasRef, "canvasRef", clickedPoint);
+    if (this.canvasRef) {
+        this.canvasRef.strokeStyle = 'red';
+        var canvasx = this.dygraph.toDomXCoord(clickedPoint);
+        var range = this.dygraph.yAxisRange();
+        this.canvasRef.beginPath();
+        this.canvasRef.moveTo(canvasx, this.dygraph.toDomYCoord(range[0]));
+        this.canvasRef.lineTo(canvasx, this.dygraph.toDomYCoord(range[1]));
+        this.canvasRef.stroke();
+        this.canvasRef.closePath();
+    }
+  }
+
+  generateGraph(dygraphService: DygraphViewerService, graphData?: GraphData) {
     setTimeout(() => {
-      console.log(this.graphData, "this.graphData")
-      if (this.graphData) {
+      if (graphData) {
         this.dygraph = new Dygraph(this.chart?.nativeElement,
-          this.graphData.data,
+          graphData.data,
          {
-          ...this.graphData.options,
+          ...graphData.options,
           pointClickCallback: (event, points) => {
             if (points.xval) {
-              dygraphService?.drawVerticalLineOnCanvas(this.dygraph, points.xval)
+              this.drawVerticalLineOnCanvas(points.xval);
             }
           },
-          underlayCallback: function(canvas, area, g) {
-            dygraphService?.setGraphCanvasRef(canvas);
+          underlayCallback: (canvas: CanvasRenderingContext2D, area, g) => {
+            this.canvasRef = canvas
           }
         },
         );
@@ -73,7 +88,7 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
     if (this.currentGraphType !== this.graphType) {
       this.currentGraphType = this.graphType;
 
-      this.generateGraph(this.dyGraphService);
+      this.generateGraph(this.dyGraphService, this.graphData);
     }
 
     this.fetchGraphDatIfRequired();
@@ -81,7 +96,7 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
     if (this.dygraph) {
       this.checkAndResizeWidth();
     } else {
-      this.generateGraph(this.dyGraphService);
+      this.generateGraph(this.dyGraphService, this.graphData);
     }
   }
 
