@@ -5,9 +5,9 @@ const graphsData = [
         id: 1,
         title: `Graph 1`,
         data: [
-          [new Date("2008/05/07"), 75],
-          [new Date("2008/05/08"), 70],
-          [new Date("2008/05/09"), 80]
+          // [new Date("2008/05/07"), 75],
+          // [new Date("2008/05/08"), 70],
+          // [new Date("2008/05/09"), 80]
         ],
         options: {
           labels: ['Date','Temperature'],

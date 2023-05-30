@@ -47,13 +47,23 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
     }
   }
 
-  generateGraph() {
+  generateGraph(dygraphService: DygraphViewerService) {
     setTimeout(() => {
       console.log(this.graphData, "this.graphData")
       if (this.graphData) {
         this.dygraph = new Dygraph(this.chart?.nativeElement,
           this.graphData.data,
-          this.graphData.options
+         {
+          ...this.graphData.options,
+          pointClickCallback: (event, points) => {
+            if (points.xval) {
+              dygraphService?.drawVerticalLineOnCanvas(this.dygraph, points.xval)
+            }
+          },
+          underlayCallback: function(canvas, area, g) {
+            dygraphService?.setGraphCanvasRef(canvas);
+          }
+        },
         );
       }
     }, 500);
@@ -63,7 +73,7 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
     if (this.currentGraphType !== this.graphType) {
       this.currentGraphType = this.graphType;
 
-      this.generateGraph();
+      this.generateGraph(this.dyGraphService);
     }
 
     this.fetchGraphDatIfRequired();
@@ -71,16 +81,17 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
     if (this.dygraph) {
       this.checkAndResizeWidth();
     } else {
-      this.generateGraph();
+      this.generateGraph(this.dyGraphService);
     }
   }
 
   addMoreDataToGraph() {
-   this.graphData?.data.push(
-    [new Date("2008/05/10"), 90],
-    [new Date("2008/05/11"), 95],
-    [new Date("2008/05/12"), 100]
-  );
+    let i = 0;
+    for(var arr=[],dt=new Date(new Date("2008/05/10")); dt<=new Date(new Date("2023/05/30")); dt.setDate(dt.getDate()+1)){
+        this.graphData?.data.push([new Date(dt), Math.random() + 80])
+        i++;
+    }
+
    this.dygraph.updateOptions({'file': this.graphData?.data})
   }
 }
