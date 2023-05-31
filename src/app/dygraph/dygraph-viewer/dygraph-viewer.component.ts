@@ -24,7 +24,7 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
   ngOnInit(): void {
     this.graphData$?.subscribe(graphData => {
       this.graphData = graphData;
-      this.generateGraph(this.dyGraphService, this.graphData);
+      this.generateGraph();
       this.checkAndResizeWidth();
     })
   }
@@ -63,13 +63,13 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
     }
   }
 
-  generateGraph(dygraphService: DygraphViewerService, graphData?: GraphData) {
+  generateGraph() {
     setTimeout(() => {
-      if (graphData) {
+      if (this.graphData) {
         this.dygraph = new Dygraph(this.chart?.nativeElement,
-          graphData.data,
+          this.graphData.data,
          {
-          ...graphData.options,
+          ...this.graphData.options,
           pointClickCallback: (event, points) => {
             if (points.xval) {
               this.drawVerticalLineOnCanvas(points.xval);
@@ -88,7 +88,7 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
     if (this.currentGraphType !== this.graphType) {
       this.currentGraphType = this.graphType;
 
-      this.generateGraph(this.dyGraphService, this.graphData);
+      this.generateGraph();
     }
 
     this.fetchGraphDatIfRequired();
@@ -96,7 +96,7 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
     if (this.dygraph) {
       this.checkAndResizeWidth();
     } else {
-      this.generateGraph(this.dyGraphService, this.graphData);
+      this.generateGraph();
     }
   }
 
