@@ -17,6 +17,9 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
   dygraph: any;
   currentWidth = this.graphData?.options.width;
 
+  @Input() showAddData?: boolean = true;
+  @Input() showChangeType?: boolean = true;
+
   // Use to pass graph data directly.
   @Input() graphData?: GraphData;
   // Use to pass graph data observable.
@@ -108,5 +111,16 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
     }
 
    this.dygraph.updateOptions({'file': this.graphData?.data})
+  }
+
+  replaceDataInGraph() {
+    let i = 0;
+    const newData = [];
+    for(var arr=[],dt=new Date(new Date("2023/01/01")); dt<=new Date(new Date("2023/05/30")); dt.setDate(dt.getDate()+1)){
+        newData.push([new Date(dt), Math.random() + 80])
+        i++;
+    }
+
+   this.dygraph.updateOptions({'file': newData})
   }
 }

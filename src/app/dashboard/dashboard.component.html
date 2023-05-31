@@ -4,7 +4,10 @@
 
   <mat-grid-list cols="1">
     <mat-card> 
-      <app-dygraph-viewer [graphData$]="mainGraphData$"></app-dygraph-viewer>
+      <app-dygraph-viewer
+        [showChangeType]=false
+        [graphData$]="mainGraphData$">
+      </app-dygraph-viewer>
     </mat-card>
   </mat-grid-list>
   
@@ -13,7 +16,8 @@
       <app-dygraph-viewer
         *ngIf="graph | async as graphData"
         [graphData]="graphData"
-        [graphType]="i+''">
+        [graphType]="i+''"
+        [showAddData]=false>
       </app-dygraph-viewer>
     </mat-grid-tile>
   </mat-grid-list>
