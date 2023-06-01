@@ -1,4 +1,14 @@
-import { Component, ElementRef, ViewChild, Input, OnChanges, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  Input,
+  OnChanges,
+  ChangeDetectionStrategy,
+  OnInit,
+  Output,
+  EventEmitter
+} from '@angular/core';
 import Dygraph from 'dygraphs';
 import { DygraphViewerService } from '../dygraph-viewer.service';
 import { Observable } from 'rxjs';
@@ -19,6 +29,10 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
 
   @Input() showAddData?: boolean = true;
   @Input() showChangeType?: boolean = true;
+
+  // Added to try out event emitter
+  @Output() log = new EventEmitter<GraphData>();
+  logGraph() { this.log.emit(this.graphData); }
 
   // Use to pass graph data directly.
   @Input() graphData?: GraphData;
@@ -110,7 +124,9 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
         i++;
     }
 
-   this.dygraph.updateOptions({'file': this.graphData?.data})
+   this.dygraph.updateOptions({'file': this.graphData?.data});
+
+   this.logGraph();
   }
 
   replaceDataInGraph() {
@@ -121,6 +137,7 @@ export class DygraphViewerComponent implements OnChanges, OnInit {
         i++;
     }
 
-   this.dygraph.updateOptions({'file': newData})
+   this.dygraph.updateOptions({'file': newData});
+   this.logGraph();
   }
 }

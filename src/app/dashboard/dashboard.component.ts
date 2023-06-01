@@ -34,4 +34,8 @@ export class DashboardComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.windowResize$.unsubscribe()
   }
+
+  logGraphActionDoneOn(graphData: GraphData): void {
+    console.log("User done action on", graphData.id)
+  }
 }

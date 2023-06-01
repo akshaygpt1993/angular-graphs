@@ -6,7 +6,8 @@
     <mat-card> 
       <app-dygraph-viewer
         [showChangeType]=false
-        [graphData$]="mainGraphData$">
+        [graphData$]="mainGraphData$"
+        (log)="logGraphActionDoneOn($event)">
       </app-dygraph-viewer>
     </mat-card>
   </mat-grid-list>
@@ -17,7 +18,8 @@
         *ngIf="graph | async as graphData"
         [graphData]="graphData"
         [graphType]="i+''"
-        [showAddData]=false>
+        [showAddData]=false
+        (log)="logGraphActionDoneOn($event)">
       </app-dygraph-viewer>
     </mat-grid-tile>
   </mat-grid-list>
