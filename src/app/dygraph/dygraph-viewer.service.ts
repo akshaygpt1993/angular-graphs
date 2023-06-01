@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import graphsData from './graph.mock';
 import {of} from "rxjs";
 import { GraphData } from './dygraph.typings';
-import Dygraph from 'dygraphs';
 
 @Injectable()
 export class DygraphViewerService {

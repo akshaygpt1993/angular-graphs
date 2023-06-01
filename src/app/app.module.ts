@@ -11,6 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
+import { DygraphViewerService } from './dygraph/dygraph-viewer.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,9 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatButtonModule,
     LayoutModule
   ],
-  providers: [],
+  providers: [
+    DygraphViewerService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
