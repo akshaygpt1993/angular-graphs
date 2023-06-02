@@ -8,6 +8,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
 import { DashboardComponent } from './dashboard.component';
+import { DygraphViewerService } from '../dygraph/dygraph-viewer.service';
+import { DygraphViewerComponent } from '../dygraph/dygraph-viewer/dygraph-viewer.component';
+
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -15,7 +20,7 @@ describe('DashboardComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [DashboardComponent],
+      declarations: [DashboardComponent, DygraphViewerComponent],
       imports: [
         NoopAnimationsModule,
         LayoutModule,
@@ -24,7 +29,8 @@ describe('DashboardComponent', () => {
         MatGridListModule,
         MatIconModule,
         MatMenuModule,
-      ]
+      ],
+      providers: [DygraphViewerService]
     }).compileComponents();
   }));
 
@@ -36,5 +42,19 @@ describe('DashboardComponent', () => {
 
   it('should compile', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have title Data Viewer', () => {
+    const element: DebugElement  = fixture.debugElement;
+    const titleInstance = element.query(By.css(".mat-h1"));
+
+    expect(titleInstance.nativeElement.textContent).toEqual("Data Viewer");
+  });
+
+  it('should have 3 graph viewer components', () => {
+    const element: DebugElement  = fixture.debugElement;
+    const viewerInstances = element.queryAll(By.css("app-dygraph-viewer"));
+
+    expect(viewerInstances.length).toEqual(3);
   });
 });
